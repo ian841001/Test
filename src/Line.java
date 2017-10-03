@@ -5,6 +5,14 @@ public class Line {
 	public Point end;
 	public int len;
 	
+	private boolean isA = false;
+	private boolean isB = false;
+	private boolean isAngle = false;
+	
+	private double _a;
+	private double _b;
+	private double _angle;
+	
 	
 	
 	public Line(Point start, Point end, int len) {
@@ -26,7 +34,25 @@ public class Line {
 		return new Point(x, y);
 	}
 	public double getA() {
-		return getA(this);
+		if (!isA) {
+			_a = getA(this);
+			isA = true;
+		}
+		return _a;
+	}
+	public double getB() {
+		if (!isB) {
+			_b = getB(this);
+			isB = true;
+		}
+		return _b;
+	}
+	public double getAngle() {
+		if (!isAngle) {
+			_angle = getAngle(this);
+			isAngle = true;
+		}
+		return _angle;
 	}
 	public static double getA(Line l) {
 		return getA(l.start, l.end);
@@ -37,9 +63,6 @@ public class Line {
 	public static double getA(double x1, double y1, double x2, double y2) {
 		return (y2 - y1) / (x1 * y2 - x2 * y1);
 	}
-	public double getB() {
-		return getB(this);
-	}
 	public static double getB(Line l) {
 		return getB(l.start, l.end);
 	}
@@ -48,9 +71,6 @@ public class Line {
 	}
 	public static double getB(double x1, double y1, double x2, double y2) {
 		return (x1 - x2) / (x1 * y2 - x2 * y1);
-	}
-	public double getAngle() {
-		return getAngle(this);
 	}
 	public static double getAngle(Line l) {
 		return getAngle(l.start, l.end);
