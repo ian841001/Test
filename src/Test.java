@@ -2,8 +2,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
@@ -14,8 +13,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 public class Test {
 	
@@ -29,53 +29,55 @@ public class Test {
 	public static void main(String[] avgs) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		File dir = new File("/Users/ian/Downloads/p");
-		
-		File[] files = dir.listFiles(new FileFilter() {
-			
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(".jpg");
-			}
-		});
-		int filesLen = files.length;
-		int filesOffset = 0;
-		
-		filesOffset = 0;
-		//filesLen = 1;
-		for (int i = 0; i < filesLen; i++) {
-			System.out.println(files[i + filesOffset].getAbsolutePath());
-			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-			cal(f, i);
-			
-		}
+//		File dir = new File("/Users/ian/Downloads/p");
+//		
+//		File[] files = dir.listFiles(new FileFilter() {
+//			
+//			@Override
+//			public boolean accept(File pathname) {
+//				return pathname.getName().endsWith(".jpg");
+//			}
+//		});
+//		int filesLen = files.length;
+//		int filesOffset = 0;
+//			
+//		filesOffset = 0;
+//		//filesLen = 1;
+//		for (int i = 0; i < filesLen; i++) {
+//			System.out.println(files[i + filesOffset].getAbsolutePath());
+//			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+//			cal(f, i);
+//			
+//		}
 		
 		
 
-//		VideoCapture camera = new VideoCapture(0);
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		camera.open(0);
-//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
-//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
-//
-////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
-////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
-//		
-//		
-//		
-//		camera.read(f);
-//		camera.read(f);
-//
-//		if (!camera.isOpened()) {
-//			System.out.println("error");
-//		} else {
-//			cal(f);
-//		}
-//		camera.release();
+		VideoCapture camera = new VideoCapture(0);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		camera.open(0);
+		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
+		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
+
+//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
+//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
+		
+		Mat f = new Mat();
+		
+		camera.read(f);
+		camera.read(f);
+		
+		ps.println(f.toString());
+		
+		if (!camera.isOpened()) {
+			System.out.println("error");
+		} else {
+			showImage(f, "", 100, 100);
+		}
+		camera.release();
 
 	}
 	
@@ -216,10 +218,10 @@ public class Test {
 		
 		Point intersectionPoint = lines1.get(0).getIntersectionPoint(lines2.get(0));
 		
-		int status = 1;
-		int deltaX = (int) Math.round(intersectionPoint.x) - 250;
-		int deltaY = (int) Math.round(intersectionPoint.y) - 250;
-		double angle = lines1.get(0).getAngle();
+		status = 1;
+		deltaX = (int) Math.round(intersectionPoint.x) - 250;
+		deltaY = (int) Math.round(intersectionPoint.y) - 250;
+		angle = lines1.get(0).getAngle();
 		
 		
 		
@@ -296,13 +298,20 @@ public class Test {
 	
 
 	public static void showImage(Mat f, String title, int x, int y) {
-		JFrame frame0 = new JFrame();
-		frame0.getContentPane().add(new MyJPanel(f));
-		frame0.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame0.setTitle(title);
-		frame0.setSize(f.width(), f.height() + 30);
-		frame0.setLocation(x, y);
-		frame0.setVisible(true);
+		
+		try {
+			JFrame frame0 = new JFrame();
+			frame0.getContentPane().add(new MyJPanel(f));
+			frame0.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame0.setTitle(title);
+			frame0.setSize(f.width(), f.height() + 30);
+			frame0.setLocation(x, y);
+			frame0.setVisible(true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public static void showImage(BufferedImage f, String title, int x, int y) {
