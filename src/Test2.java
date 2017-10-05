@@ -7,12 +7,11 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 import javax.swing.JFrame;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -208,7 +207,7 @@ static PrintStream ps = System.out;
 		
 		Point intersectionPoint = lines1.get(0).getIntersectionPoint(lines2.get(0));
 		
-		int status = 1;
+		status = 1;
 		int deltaX = (int) Math.round(intersectionPoint.x) - 250;
 		int deltaY = (int) Math.round(intersectionPoint.y) - 250;
 		double angle = lines1.get(0).getAngle();
