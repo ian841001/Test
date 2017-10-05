@@ -1,21 +1,21 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
 
 public class Test {
 	
@@ -27,7 +27,8 @@ public class Test {
 	static double angle = 0;
 
 	public static void main(String[] avgs) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		makeJpg();
+		// System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
 //		File dir = new File("/Users/ian/Downloads/p");
 //		
@@ -52,33 +53,38 @@ public class Test {
 		
 		
 
-		VideoCapture camera = new VideoCapture(0);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		camera.open(0);
-		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
-		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
+//		VideoCapture camera = new VideoCapture();
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		camera.open(0);
+//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
+//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
+//
+////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
+////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
+//		
+//		Mat f = new Mat();
+//		
+//		camera.read(f);
+//		camera.read(f);
+//		
+//		ps.println(f.toString());
+//		
+//		if (!camera.isOpened()) {
+//			System.out.println("error");
+//		} else {
+//			showImage(f, "", 100, 100);
+//		}
+//		camera.release();
 
-//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
-//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
+	}
+	
+	public static void makeJpg() {
 		
-		Mat f = new Mat();
 		
-		camera.read(f);
-		camera.read(f);
-		
-		ps.println(f.toString());
-		
-		if (!camera.isOpened()) {
-			System.out.println("error");
-		} else {
-			showImage(f, "", 100, 100);
-		}
-		camera.release();
-
 	}
 	
 	public static void cal(Mat f, int index) {
