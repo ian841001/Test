@@ -44,12 +44,12 @@ static PrintStream ps = System.out;
 		int filesLen = files.length;
 		int filesOffset = 0;
 		
-		filesOffset = 0;
+		filesOffset = 2;
 		filesLen = 1;
 		for (int i = 0; i < filesLen; i++) {
 			System.out.println(files[i + filesOffset].getAbsolutePath());
 			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-			calLine(f, i);
+			cal(f, i);
 			
 		}
 		
@@ -137,6 +137,10 @@ static PrintStream ps = System.out;
 				}
 				
 				angle3[i] = angle;
+			}
+			
+			for ( double p : angle3) {
+				ps.println(p);
 			}
 			
 			preIndex = 0;
