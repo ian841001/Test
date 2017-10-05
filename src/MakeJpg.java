@@ -18,7 +18,47 @@ public class MakeJpg {
 		
 		
 //		makeLine(dirPath);
-		makeCurcle(dirPath);
+//		makeCurcle(dirPath);
+		makeTen(dirPath);
+	}
+	public static void makeTen(File dirPath) {
+		BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = bufferedImage.createGraphics();
+		Polygon polygon = new Polygon();
+		for (int i = 0; i < 360; i++) {
+			polygon.reset();
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+			double angle;
+			angle = (i - 3) * Math.PI / 180;			
+			polygon.addPoint((int)(250 + Math.sin(angle) * 70) , (int)(250 + Math.cos(angle) * 70));
+			angle = (i + 3) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 70) , (int)(250 + Math.cos(angle) * 70));
+			angle = (i + 177) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 70) , (int)(250 + Math.cos(angle) * 70));
+			angle = (i - 177) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 70) , (int)(250 + Math.cos(angle) * 70));
+			g.setColor(Color.BLACK);
+			g.fillPolygon(polygon);
+			polygon.reset();
+			angle = (i - 83) * Math.PI / 180;			
+			polygon.addPoint((int)(250 + Math.sin(angle) * 40) , (int)(250 + Math.cos(angle) * 40));
+			angle = (i + 83) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 40) , (int)(250 + Math.cos(angle) * 40));
+			angle = (i + 97) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 40) , (int)(250 + Math.cos(angle) * 40));
+			angle = (i - 97) * Math.PI / 180;
+			polygon.addPoint((int)(250 + Math.sin(angle) * 40) , (int)(250 + Math.cos(angle) * 40));
+			g.setColor(Color.BLACK);
+			g.fillPolygon(polygon);
+			File file = new File(dirPath, String.format("%03d.jpg", i));
+			try {
+				System.out.println(file.getAbsolutePath());
+				ImageIO.write(bufferedImage, "jpg", file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	public static void makeCurcle(File dirPath) {
 		BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
