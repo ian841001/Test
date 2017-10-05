@@ -32,7 +32,7 @@ static PrintStream ps = System.out;
 		// TODO Auto-generated method stub
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-		File dir = new File("C:\\Users\\tp6m3\\Desktop\\eclipse\\p");
+		File dir = new File("C:\\Users\\tp6m3\\Desktop\\eclipse\\jpg\\ten");
 		
 		File[] files = dir.listFiles(new FileFilter() {
 			
@@ -44,12 +44,15 @@ static PrintStream ps = System.out;
 		int filesLen = files.length;
 		int filesOffset = 0;
 		
-		filesOffset = 2;
-		filesLen = 1;
+		filesOffset = 0;
+//		filesLen = 1;
 		for (int i = 0; i < filesLen; i++) {
 			System.out.println(files[i + filesOffset].getAbsolutePath());
 			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+			
 			cal(f, i);
+			
+			
 			
 		}
 		
