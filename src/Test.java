@@ -45,12 +45,12 @@ public class Test {
 		int filesLen = files.length;
 		int filesOffset = 0;
 			
-		filesOffset = 4;
-		filesLen = 1;
+		filesOffset = 0;
+//		filesLen = 1;
 		for (int i = 0; i < filesLen && i + filesOffset < files.length; i++) {
 //			System.out.println(files[i + filesOffset].getAbsolutePath());
 			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-			cal2(f, i);
+			cal(f, i);
 			
 		}
 		
@@ -177,6 +177,7 @@ public class Test {
 			int nexIndex;
 			double[] angle1 = new double[pointsLen];
 			double[] angle2 = new double[pointsLen];
+			double[] angle3 = new double[pointsLen];
 			for (int i = 0; i < pointsLen; i++) {
 				preIndex = i - 2;
 				nexIndex = i + 2;
@@ -198,6 +199,21 @@ public class Test {
 				}
 				
 				angle2[i] = angle;
+			}
+			
+			for (int i = 0; i < pointsLen; i++) {
+				preIndex = i - 1;
+				nexIndex = i + 1;
+				if (preIndex < 0) preIndex += pointsLen;
+				if (nexIndex >= pointsLen) nexIndex -= pointsLen;
+				double angle = angle2[preIndex] - angle2[nexIndex];
+				if (angle < -180) {
+					angle += 360;
+				} else if (angle > 180) {
+					angle -= 360;
+				}
+				
+				angle3[i] = angle;
 			}
 			
 			preIndex = 0;
