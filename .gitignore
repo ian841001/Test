@@ -5,3 +5,7 @@ bin/Test$1.class
 *.class
 .classpath
 .classpath
+<<<<<<< HEAD
+=======
+.classpath
+>>>>>>> 7dc6b36227c0b19c5bfc17debd4ea329f0dc7749

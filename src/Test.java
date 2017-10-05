@@ -2,6 +2,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -13,13 +15,14 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
 
 public class Test {
 	
 	static PrintStream ps = System.out;
+	
+	static int showIndex = 0;
 	
 	static int status = 0;
 	static int deltaX = 0;
@@ -27,74 +30,121 @@ public class Test {
 	static double angle = 0;
 
 	public static void main(String[] avgs) {
+		
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
-//		File dir = new File("/Users/ian/Downloads/p");
-//		
-//		File[] files = dir.listFiles(new FileFilter() {
-//			
-//			@Override
-//			public boolean accept(File pathname) {
-//				return pathname.getName().endsWith(".jpg");
-//			}
-//		});
-//		int filesLen = files.length;
-//		int filesOffset = 0;
-//			
-//		filesOffset = 0;
-//		//filesLen = 1;
-//		for (int i = 0; i < filesLen; i++) {
+		File dir = new File("/Users/ian/Documents/making/project/TDK_21th/jpg/ten");
+		
+		File[] files = dir.listFiles(new FileFilter() {
+			
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.getName().endsWith(".jpg");
+			}
+		});
+		int filesLen = files.length;
+		int filesOffset = 0;
+			
+		filesOffset = 4;
+		filesLen = 1;
+		for (int i = 0; i < filesLen && i + filesOffset < files.length; i++) {
 //			System.out.println(files[i + filesOffset].getAbsolutePath());
-//			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-//			cal(f, i);
-//			
+			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+			cal2(f, i);
+			
+		}
+		
+		
+
+//		VideoCapture camera = new VideoCapture();
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
 //		}
-		
-		
-
-		VideoCapture camera = new VideoCapture(0);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		camera.open(0);
-		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
-		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
-
-//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
-//		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
-		
-		Mat f = new Mat();
-		
-		camera.read(f);
-		camera.read(f);
-		
-		ps.println(f.toString());
-		
-		if (!camera.isOpened()) {
-			System.out.println("error");
-		} else {
-			showImage(f, "", 100, 100);
-		}
-		camera.release();
+//		camera.open(0);
+//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_WIDTH, 500));
+//		System.out.println(camera.set(Videoio.CV_CAP_PROP_FRAME_HEIGHT, 500));
+//
+////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_WIDTH));
+////		System.out.println(camera.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT));
+//		
+//		Mat f = new Mat();
+//		
+//		camera.read(f);
+//		camera.read(f);
+//		
+//		ps.println(f.toString());
+//		
+//		if (!camera.isOpened()) {
+//			System.out.println("error");
+//		} else {
+//			showImage(f, "", 100, 100);
+//		}
+//		camera.release();
 
 	}
+	public static void cal2(Mat f, int index) {
+		Mat lines = new Mat();
+	    Mat grey = new Mat();
+		Mat edges = new Mat();
+
+	    Imgproc.cvtColor(f, grey, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.GaussianBlur(grey, grey, new Size(3, 3), 0, 0);
+		Imgproc.Canny(grey, edges, 250, 150, 3, true);
+	    Imgproc.HoughLinesP(edges, lines, 1, Math.PI / 180, 0, 10, 0);
+	    
+	    
+	    
+	    
+	    
+	    BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = bufferedImage.createGraphics();
+		
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+		g.setColor(Color.WHITE);
+//		for (Point point : max) {
+//			g.drawRect((int)point.x, (int)point.y, 1, 1);
+//		}
+
+		g.setColor(Color.GREEN);
+		g.setStroke(new BasicStroke(1));
+		
+	    for (int i = 0; i < lines.rows(); i++) {
+	    	double[] vec = lines.get(i, 0);
+	    	double len = Math.pow(Math.pow(vec[0] - vec[2], 2) + Math.pow(vec[1] - vec[3], 2), 0.5);
+	    	ps.printf("( %d , %d ) , ( %d , %d ) : %6.2f\n", (int) vec[0], (int) vec[1], (int) vec[2], (int) vec[3], len);
+	    	g.drawLine((int) vec[0], (int) vec[1], (int) vec[2], (int) vec[3]);
+	    }
+	    showImage(bufferedImage, "result" + String.valueOf(index), 0 + showIndex * 50, 100 + showIndex * 50);
+	    showImage(edges, "edges" + String.valueOf(index), 500 + showIndex * 50, 100 + showIndex * 50);
+		showImage(f, "f" + String.valueOf(index), 1000 + showIndex * 50, 100 + showIndex * 50);
+		
+		showIndex++;
+	    ps.printf("%3d : %2d\n", index, lines.rows());
+	    
+	}
+	
+	
+	
 	
 	public static void cal(Mat f, int index) {
 		
 		Mat f2 = new Mat();
 		Mat edges = new Mat();
 		Mat hierarchy = new Mat();
+		Mat linesF = new Mat();
 
 		// showImage(f, "f" + String.valueOf(index), 100 + index * 50, 100 + index * 50);
 		Imgproc.cvtColor(f, f2, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.GaussianBlur(f2, f2, new Size(3, 3), 0, 0);
 		Imgproc.Canny(f2, edges, 250, 150, 3, true);
+		Imgproc.HoughLinesP(edges, linesF, 1, Math.PI / 180, 20, 10, 5);
 		// showImage(f, "f", 100, 100);
 		// showImage(f2, "f2", 100, 100);
 		// showImage(f3, "f3", 100, 100);
-		showImage(edges, "edges" + String.valueOf(index), 600 + index * 50, 100 + index * 50);
+		
 
 		ArrayList<MatOfPoint> contours = new ArrayList<>();
 		Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
@@ -216,18 +266,35 @@ public class Test {
 			}
 		}
 		
-		Point intersectionPoint = lines1.get(0).getIntersectionPoint(lines2.get(0));
+		Point intersectionPoint = null;
+		if (!lines1.isEmpty() && !lines2.isEmpty()) {
+			intersectionPoint= lines1.get(0).getIntersectionPoint(lines2.get(0));
+			
+			status = 1;
+			deltaX = (int) Math.round(intersectionPoint.x) - 250;
+			deltaY = (int) Math.round(intersectionPoint.y) - 250;
+			angle = lines1.get(0).getAngle() + index - 90;
+			if (angle < -180) {
+				angle += 360;
+			}
+			if (angle > 180) {
+				angle -= 360;
+			}
+			
+			if (angle < -90) {
+				angle += 180;
+			}
+			if (angle > 90) {
+				angle -= 180;
+			}
+			
+			ps.printf("%03d : ( %3d , %3d ) %5.2f\n", index, deltaX, deltaY, angle);
+		}
 		
-		status = 1;
-		deltaX = (int) Math.round(intersectionPoint.x) - 250;
-		deltaY = (int) Math.round(intersectionPoint.y) - 250;
-		angle = lines1.get(0).getAngle();
 		
 		
 		
-		
-		
-		ps.printf("( %d , %d ) %.2f\n", deltaX, deltaY, angle);
+		// if (deltaX != 250 || deltaY != 250 || angle != index)
 		
 		
 		
@@ -236,41 +303,54 @@ public class Test {
 		
 		
 		
-		
-		
-		BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
-		Graphics2D g = bufferedImage.createGraphics();
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
-		g.setColor(Color.WHITE);
-//		for (Point point : max) {
-//			g.drawRect((int)point.x, (int)point.y, 1, 1);
-//		}
+		if (status == 0 || Math.abs(angle) > 5) {
+			BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g = bufferedImage.createGraphics();
+			
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+			g.setColor(Color.WHITE);
+//			for (Point point : max) {
+//				g.drawRect((int)point.x, (int)point.y, 1, 1);
+//			}
 
-		g.setColor(Color.GREEN);
-		g.setStroke(new BasicStroke(3));
-		for (Line line : lines1) {
-			g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+			g.setColor(Color.GREEN);
+			g.setStroke(new BasicStroke(3));
+			for (Line line : lines1) {
+				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+			}
+			g.setColor(Color.RED);
+			for (Line line : lines2) {
+				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+			}
+			g.setStroke(new BasicStroke(1));
+			g.setColor(Color.YELLOW);
+			if (!lines1.isEmpty()) {
+				drawLine(g, lines1.get(0));
+			}
+			if (!lines2.isEmpty()) {
+				drawLine(g, lines2.get(0));
+			}
+			
+			if (intersectionPoint != null) {
+				g.setColor(Color.BLUE);
+				drawDot(g, intersectionPoint, 10);
+			}
+			
+			
+			
+			
+			
+			showImage(bufferedImage, "result" + String.valueOf(index), 0 + showIndex * 50, 100 + showIndex * 50);
+			showImage(edges, "edges" + String.valueOf(index), 500 + showIndex * 50, 100 + showIndex * 50);
+			showImage(f, "f" + String.valueOf(index), 1000 + showIndex * 50, 100 + showIndex * 50);
+			
+			showIndex++;
 		}
-		g.setColor(Color.RED);
-		for (Line line : lines2) {
-			g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
-		}
-		g.setStroke(new BasicStroke(1));
-		g.setColor(Color.YELLOW);
-		drawLine(g, lines1.get(0));
-		drawLine(g, lines2.get(0));
-		
-		g.setColor(Color.BLUE);
-		drawDot(g, intersectionPoint, 10);
 		
 		
 		
-		
-		showImage(bufferedImage, "result" + String.valueOf(index), 100 + index * 50, 100 + index * 50);
 	}
-	
 	
 	public static void drawDot(Graphics2D g, Point point, int r) {
 		g.drawOval((int)point.x - r, (int)point.y - r, 2 * r, 2 * r);
