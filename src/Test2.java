@@ -433,7 +433,7 @@ static PrintStream ps = System.out;
 		for (Line line : lines1) {
 			g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
 		}
-		Line VLine = new Line();
+//		Line vLine = new Line();
 //		g.setColor(Color.RED);
 //		for (Line line : lines2) {
 //			g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
