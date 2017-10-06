@@ -45,8 +45,8 @@ public class Test {
 		int filesLen = files.length;
 		int filesOffset = 0;
 			
-		filesOffset = 0;
-//		filesLen = 1;
+		filesOffset = 62;
+		filesLen = 1;
 		for (int i = 0; i < filesLen && i + filesOffset < files.length; i++) {
 //			System.out.println(files[i + filesOffset].getAbsolutePath());
 			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
@@ -304,9 +304,9 @@ public class Test {
 				angle -= 180;
 			}
 			
-			ps.printf("%03d : ( %3d , %3d ) %5.2f\n", index, deltaX, deltaY, angle);
+			
 		}
-		
+		ps.printf("%03d : ( %3d , %3d ) %5.2f %2d %2d\n", index, deltaX, deltaY, angle, lines1.size(), lines2.size());
 		
 		
 		
@@ -334,10 +334,13 @@ public class Test {
 			g.setStroke(new BasicStroke(3));
 			for (Line line : lines1) {
 				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+				ps.printf("( %d , %d ) , ( %d , %d ) %f %f\n", (int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y, line.getA(), line.getB());
 			}
+			ps.println();
 			g.setColor(Color.RED);
 			for (Line line : lines2) {
 				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+				ps.printf("( %d , %d ) , ( %d , %d ) %f %f\n", (int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y, line.getA(), line.getB());
 			}
 			g.setStroke(new BasicStroke(1));
 			g.setColor(Color.YELLOW);
@@ -419,5 +422,4 @@ public class Test {
 		frame0.setLocation(x, y);
 		frame0.setVisible(true);
 	}
-
 }
