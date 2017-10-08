@@ -3,3 +3,4 @@
 *.class
 src/Test.java
 bin/Test.class
+src/MakeJpg.java
