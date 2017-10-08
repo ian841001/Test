@@ -7,9 +7,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.opencv.core.Core;
+
 public class MakeJpg {
 
 	public static void main(String[] args) {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//		System.out.println(Core.getBuildInformation());
 		File dirPath = new File("/Users/ian/Downloads/makeJpg");
 		
 		for (File file : dirPath.listFiles()) {
@@ -51,10 +55,10 @@ public class MakeJpg {
 			polygon.addPoint((int)(250 + Math.sin(angle) * 40) , (int)(250 + Math.cos(angle) * 40));
 			g.setColor(Color.BLACK);
 			g.fillPolygon(polygon);
-			File file = new File(dirPath, String.format("%03d.jpg", i));
+			File file = new File(dirPath, String.format("%03d.png", i));
 			try {
 				System.out.println(file.getAbsolutePath());
-				ImageIO.write(bufferedImage, "jpg", file);
+				ImageIO.write(bufferedImage, "png", file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -74,10 +78,10 @@ public class MakeJpg {
 			g.fillRect(215, 0, 70, 500);
 			g.setColor(Color.BLUE);
 			g.fillOval(250 - r, i - r, r * 2, r * 2);
-			File file = new File(dirPath, String.format("%04d.jpg", i + r));
+			File file = new File(dirPath, String.format("%04d.png", i + r));
 			try {
 				System.out.println(file.getAbsolutePath());
-				ImageIO.write(bufferedImage, "jpg", file);
+				ImageIO.write(bufferedImage, "png", file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -103,10 +107,10 @@ public class MakeJpg {
 			g.setColor(Color.BLACK);
 			g.fillPolygon(polygon);
 			
-			File file = new File(dirPath, String.format("%03d.jpg", i));
+			File file = new File(dirPath, String.format("%03d.png", i));
 			try {
 				System.out.println(file.getAbsolutePath());
-				ImageIO.write(bufferedImage, "jpg", file);
+				ImageIO.write(bufferedImage, "png", file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

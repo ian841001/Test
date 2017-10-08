@@ -2,20 +2,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class Test {
@@ -31,28 +27,32 @@ public class Test {
 
 	public static void main(String[] avgs) {
 		
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//		byte[] test = new byte[]{1,2,3,4};
+//		ArrayList<Byte> test2 = new ArrayList<>();
 		
-		File dir = new File("/Users/ian/Documents/making/project/TDK_21th/jpg/ten");
 		
-		File[] files = dir.listFiles(new FileFilter() {
-			
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(".jpg");
-			}
-		});
-		int filesLen = files.length;
-		int filesOffset = 0;
-			
-		filesOffset = 0;
-//		filesLen = 1;
-		for (int i = 0; i < filesLen && i + filesOffset < files.length; i++) {
-//			System.out.println(files[i + filesOffset].getAbsolutePath());
-			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-			cal(f, i);
-			
-		}
+//		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//		
+//		File dir = new File("/Users/ian/Documents/making/project/TDK_21th/jpg/ten");
+//		
+//		File[] files = dir.listFiles(new FileFilter() {
+//			
+//			@Override
+//			public boolean accept(File pathname) {
+//				return pathname.getName().endsWith(".png");
+//			}
+//		});
+//		int filesLen = files.length;
+//		int filesOffset = 0;
+//			
+//		filesOffset = 0;
+////		filesLen = 1;
+//		for (int i = 0; i < filesLen && i + filesOffset < files.length; i++) {
+////			System.out.println(files[i + filesOffset].getAbsolutePath());
+//			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+//			cal(f, i);
+//			
+//		}
 		
 		
 
@@ -304,9 +304,9 @@ public class Test {
 				angle -= 180;
 			}
 			
-			ps.printf("%03d : ( %3d , %3d ) %5.2f\n", index, deltaX, deltaY, angle);
+			
 		}
-		
+		ps.printf("%03d : ( %3d , %3d ) %5.2f %2d %2d\n", index, deltaX, deltaY, angle, lines1.size(), lines2.size());
 		
 		
 		
@@ -332,13 +332,16 @@ public class Test {
 
 			g.setColor(Color.GREEN);
 			g.setStroke(new BasicStroke(3));
-			for (Line line : lines1) {
-				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
-			}
+//			for (Line line : lines1) {
+//				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+//				ps.printf("( %d , %d ) , ( %d , %d ) %f %f\n", (int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y, line.getA(), line.getB());
+//			}
+//			ps.println();
 			g.setColor(Color.RED);
-			for (Line line : lines2) {
-				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
-			}
+//			for (Line line : lines2) {
+//				g.drawLine((int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y);
+//				ps.printf("( %d , %d ) , ( %d , %d ) %f %f\n", (int)line.start.x, (int)line.start.y, (int)line.end.x, (int)line.end.y, line.getA(), line.getB());
+//			}
 			g.setStroke(new BasicStroke(1));
 			g.setColor(Color.YELLOW);
 			if (!lines1.isEmpty()) {
@@ -419,5 +422,4 @@ public class Test {
 		frame0.setLocation(x, y);
 		frame0.setVisible(true);
 	}
-
 }
