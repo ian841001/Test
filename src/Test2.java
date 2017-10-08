@@ -309,26 +309,26 @@ static PrintStream ps = System.out;
 //		int frameY = 500;
 //		ArrayList<Point> points = new ArrayList<>();
 		
-		ArrayList<Point>[][] pointList = new ArrayList[frameXY/2][4];
+		Point[][] pointList = new Point[frameXY/2][4];
 		
-		for(int i=0; i<250; i++) {
-			for(int j=0; j<4; j++) {
-				pointList[i][j] = new ArrayList<>();
-			}
-		}
 		for(MatOfPoint contour : contours) {
 			for (Point p : contour.toArray()) {
-				double r1 = p.x - p.y;
-				double r2 = p.x + p.y;
-//				ps.println(p);
-				if (r1 >= 0 && r2 >= frameXY) {
-					pointList[(int) (frameXY-p.x)][1].add(p);
-				} else if (r1 >= 0 && r2 < frameXY) {
-					pointList[(int) (p.y)][0].add(p);
-				} else if (r1 < 0 && r2 >= frameXY) {
-					pointList[(int) (frameXY-p.y)][2].add(p);
-				} else if (r1 < 0 && r2 < frameXY) {
-					pointList[(int) (p.x)][3].add(p);
+				int x = (int) p.x;
+				int y = (int) p.y;
+				int r1 = x - y;
+				int r2 = x + y;
+				if (r1 >= 0) {
+					if (r2 >= frameXY) {
+						pointList[frameXY-x][1] = p;
+					} else {
+						pointList[y][0] = p;
+					}
+				} else {
+					if (r2 >= frameXY) {
+						pointList[frameXY-y][2] = p;
+					} else {
+						pointList[x][3] = p;
+					}
 				}
 			}
 		}
@@ -337,10 +337,10 @@ static PrintStream ps = System.out;
 		for(int i=0; i<250; i++) {
 			finalPoint.clear();
 			for(int j=0; j<4; j++) {
-				if (pointList[i][j].size() > 0) finalPoint.add(pointList[i][j].get(0));
+				if (pointList[i][j] != null) finalPoint.add(pointList[i][j]);
 			}
 			if (finalPoint.size() >= 2) {
-				ps.println("FIND");
+				// ps.println("FIND");
 				break;
 			}
 		}
