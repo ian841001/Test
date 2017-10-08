@@ -7,7 +7,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -46,16 +45,16 @@ static PrintStream ps = System.out;
 		
 		filesOffset = 0;
 //		filesLen = 0;
-		Mat f = Imgcodecs.imread("C:\\Users\\tp6m3\\Desktop\\eclipse\\lineandstop\\curve.jpg");
-		frameProcess(f, 0);
+//		Mat f = Imgcodecs.imread("C:\\Users\\tp6m3\\Desktop\\eclipse\\lineandstop\\curve.jpg");
+//		frameProcess(f, 0);
 
-//		for (int i = 0; i < filesLen; i++) {
-//			System.out.println(files[i + filesOffset].getAbsolutePath());
-//			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-//			
-//			frameProcess(f, i);
-//
-//		}
+		for (int i = 0; i < filesLen; i++) {
+			System.out.println(files[i + filesOffset].getAbsolutePath());
+			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+			
+			frameProcess(f, i);
+
+		}
 		
 	}
 	
@@ -306,11 +305,11 @@ static PrintStream ps = System.out;
 	}
 	
 	public static void calRoute(ArrayList<MatOfPoint> contours, int index) {
-		int frameX = 500;
-		int frameY = 500;
-		ArrayList<Point> points = new ArrayList<>();
+		int frameXY = 500;
+//		int frameY = 500;
+//		ArrayList<Point> points = new ArrayList<>();
 		
-		ArrayList<Point>[][] pointList = new ArrayList[250][4];
+		ArrayList<Point>[][] pointList = new ArrayList[frameXY/2][4];
 		
 		for(int i=0; i<250; i++) {
 			for(int j=0; j<4; j++) {
@@ -322,13 +321,13 @@ static PrintStream ps = System.out;
 				double r1 = p.x - p.y;
 				double r2 = p.x + p.y;
 //				ps.println(p);
-				if (r1 >= 0 && r2 >= frameX) {
-					pointList[(int) (frameX-p.x)][1].add(p);
-				} else if (r1 >= 0 && r2 < frameX) {
+				if (r1 >= 0 && r2 >= frameXY) {
+					pointList[(int) (frameXY-p.x)][1].add(p);
+				} else if (r1 >= 0 && r2 < frameXY) {
 					pointList[(int) (p.y)][0].add(p);
-				} else if (r1 < 0 && r2 >= frameX) {
-					pointList[(int) (frameX-p.y)][2].add(p);
-				} else if (r1 < 0 && r2 < frameX) {
+				} else if (r1 < 0 && r2 >= frameXY) {
+					pointList[(int) (frameXY-p.y)][2].add(p);
+				} else if (r1 < 0 && r2 < frameXY) {
 					pointList[(int) (p.x)][3].add(p);
 				}
 			}
