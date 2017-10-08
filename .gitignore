@@ -1,4 +1,10 @@
 
 .classpath
 *.class
+<<<<<<< HEAD
 .classpath
+=======
+src/Test.java
+bin/Test.class
+src/MakeJpg.java
+>>>>>>> 21a14edc8e2c3202f6958e38f8cf89d6ce1deb2b
