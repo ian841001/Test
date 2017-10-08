@@ -46,16 +46,16 @@ static PrintStream ps = System.out;
 		
 		filesOffset = 0;
 //		filesLen = 0;
-//		Mat f = Imgcodecs.imread("C:\\Users\\tp6m3\\Desktop\\eclipse\\lineandstop\\curve.jpg");
-//		frameProcess(f, 0);
+		Mat f = Imgcodecs.imread("C:\\Users\\tp6m3\\Desktop\\eclipse\\lineandstop\\curve.jpg");
+		frameProcess(f, 0);
 
-		for (int i = 0; i < filesLen; i++) {
-			System.out.println(files[i + filesOffset].getAbsolutePath());
-			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
-			
-			frameProcess(f, i);
-
-		}
+//		for (int i = 0; i < filesLen; i++) {
+//			System.out.println(files[i + filesOffset].getAbsolutePath());
+//			Mat f = Imgcodecs.imread(files[i + filesOffset].getAbsolutePath());
+//			
+//			frameProcess(f, i);
+//
+//		}
 		
 	}
 	
@@ -70,7 +70,7 @@ static PrintStream ps = System.out;
 		Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
 		showImage(f, "f" + String.valueOf(index), 100 + index * 50, 100 + index * 50);
 		showImage(edges, "e" + String.valueOf(index), 100 + index * 50, 100 + index * 50);
-		ps.println(contours.size());
+//		ps.println(contours.size());
 //		try {
 //			cal(contours, index);
 //		 {
@@ -310,48 +310,88 @@ static PrintStream ps = System.out;
 		int frameY = 500;
 		ArrayList<Point> points = new ArrayList<>();
 		
-		Point R = new Point();
-		Point T = new Point();
-		Point L = new Point();
-		Point B = new Point();
-		for(int i=0; i<500; i++) {
-			points.clear();
-			int Rf = 0;
-			int Tf = 0;
-			int Lf = 0;
-			int Bf = 0;
-			for(MatOfPoint contour : contours) {
-				for (Point p : contour.toArray()) {
-					if(p.x == i && p.y <= frameY-i && p.y >= i && Lf == 0) {
-						L = p;
-						Lf = 1;
-						points.add(p);
-					} else if (p.y == i && p.x <= frameX-i && p.x >= i && Tf == 0) {
-						T = p;
-						Tf = 1;
-						points.add(p);
-					} else if (p.x == frameX-i && p.y <= frameY-i && p.y >= i && Rf == 0){
-						R = p;
-						Rf = 1;
-						points.add(p);
-					} else if (p.y == frameY-i && p.x <= 500-i && p.x >= i && Bf == 0) {
-						B = p;
-						Bf = 1;
-						points.add(p);
-					}
-					
+		ArrayList<Point>[][] pointList = new ArrayList[250][4];
+		
+		for(int i=0; i<250; i++) {
+			for(int j=0; j<4; j++) {
+				pointList[i][j] = new ArrayList<>();
+			}
+		}
+		for(MatOfPoint contour : contours) {
+			for (Point p : contour.toArray()) {
+				double r1 = p.x - p.y;
+				double r2 = p.x + p.y;
+//				ps.println(p);
+				if (r1 >= 0 && r2 >= frameX) {
+					pointList[(int) (frameX-p.x)][1].add(p);
+				} else if (r1 >= 0 && r2 < frameX) {
+					pointList[(int) (p.y)][0].add(p);
+				} else if (r1 < 0 && r2 >= frameX) {
+					pointList[(int) (frameX-p.y)][2].add(p);
+				} else if (r1 < 0 && r2 < frameX) {
+					pointList[(int) (p.x)][3].add(p);
 				}
 			}
-			if (Lf+Tf+Rf+Bf>=2) break;
-			
 		}
-		ps.printf("%s %s %s %s", R, T, L, B);
+		
+		ArrayList<Point> finalPoint = new ArrayList<>();
+		for(int i=0; i<250; i++) {
+			finalPoint.clear();
+			for(int j=0; j<4; j++) {
+				if (pointList[i][j].size() > 0) finalPoint.add(pointList[i][j].get(0));
+			}
+			if (finalPoint.size() >= 2) {
+				ps.println("FIND");
+				break;
+			}
+		}
+		
+//		Point R = new Point();
+//		Point T = new Point();
+//		Point L = new Point();
+//		Point B = new Point();
+//		for(int i=0; i<500; i++) {
+//			points.clear();
+//			int Rf = 0;
+//			int Tf = 0;
+//			int Lf = 0;
+//			int Bf = 0;
+//			for(MatOfPoint contour : contours) {
+//				for (Point p : contour.toArray()) {
+//					if(p.x == i && p.y <= frameY-i && p.y >= i && Lf == 0) {
+//						L = p;
+//						Lf = 1;
+//						points.add(p);
+//					} else if (p.y == i && p.x <= frameX-i && p.x >= i && Tf == 0) {
+//						T = p;
+//						Tf = 1;
+//						points.add(p);
+//					} else if (p.x == frameX-i && p.y <= frameY-i && p.y >= i && Rf == 0){
+//						R = p;
+//						Rf = 1;
+//						points.add(p);
+//					} else if (p.y == frameY-i && p.x <= 500-i && p.x >= i && Bf == 0) {
+//						B = p;
+//						Bf = 1;
+//						points.add(p);
+//					}
+//					
+//				}
+//			}
+//			if (Lf+Tf+Rf+Bf>=2) break;
+//			
+//		}
+//		ps.printf("%s %s %s %s", R, T, L, B);
 		
 		BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g = bufferedImage.createGraphics();
 		g.setColor(Color.WHITE);
-		for (Point p : points) {
-			drawDot(g, p, 10);
+//		for (Point p : points) {
+//			drawDot(g, p, 10);
+//		}
+		for(Point p : finalPoint) {
+			ps.println(p);
+			drawDot(g, p, 5);
 		}
 		
 		showImage(bufferedImage, "result" + String.valueOf(index), 100 + index * 50, 100 + index * 50);
