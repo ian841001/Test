@@ -13,12 +13,7 @@ public class PID {
 
 	private int controllerDirection;
 	public int pOn;
-
-	private double myInput;              // * Pointers to the Input, Output, and Setpoint variables
-	private double myOutput;             //   This creates a hard link between the variables and the 
-	private double mySetpoint;           //   PID, freeing the user from having to constantly tell us
-                                  //   what these values are.  with pointers we'll just know.
-			  
+ 
 	private long lastTime;
 	private double outputSum, lastInput;
 
@@ -36,11 +31,7 @@ public class PID {
 	private double outMin, outMax;
 	private boolean inAuto, pOnE;
 	
-	public PID(double Input, double Output, double Setpoint,
-	        double Kp, double Ki, double Kd, int POn, int ControllerDirection) {
-		myOutput = Output;
-	    myInput = Input;
-	    mySetpoint = Setpoint;
+	public PID(double Kp, double Ki, double Kd, int POn, int ControllerDirection) {
 	    inAuto = false;
 
 	    this.setOutputLimits(0, 255);				//default output limit corresponds to
@@ -54,9 +45,9 @@ public class PID {
 	    lastTime = new Date().getTime()-SampleTime;
 	}
 	
-	public boolean compute(double inputCom, double setPointCom)
+	public double compute(double inputCom, double setPointCom)
 	{
-	   if(!inAuto) return false;
+	   if(!inAuto) return 0;
 	   long now = new Date().getTime();
 	   long timeChange = (now - lastTime);
 	   if(timeChange>=SampleTime)
@@ -81,16 +72,15 @@ public class PID {
 	      /*Compute Rest of PID Output*/
 	      output += outputSum - kd * dInput;
 
-		    if(output > outMax) output = outMax;
+		  if(output > outMax) output = outMax;
 	      else if(output < outMin) output = outMin;
-		    myOutput = output;
 
 	      /*Remember some variables for next time*/
 	      lastInput = input;
 	      lastTime = now;
-		    return true;
+		    return output;
 	   }
-	   else return false;
+	   else return 0;
 	}
 	
 	
