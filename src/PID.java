@@ -106,6 +106,16 @@ public class PID {
 	   }
 	}
 	
+	public void setMode(int mode)
+	{
+	    boolean newAuto = (mode == 1);
+	    if(newAuto && !inAuto)
+	    {  /*we just went from manual to auto*/
+	        this.Initialize();
+	    }
+	    inAuto = newAuto;
+	}
+	
 	public void Initialize() {
 	   outputSum = myOutput;
 	   lastInput = myInput;
@@ -117,15 +127,6 @@ public class PID {
 	   if(Min >= Max) return;
 	   outMin = Min;
 	   outMax = Max;
-
-	   if(inAuto)
-	   {
-		   if(myOutput > outMax) myOutput = outMax;
-		   else if(myOutput < outMin) myOutput = outMin;
-
-		   if(outputSum > outMax) outputSum= outMax;
-		   else if(outputSum < outMin) outputSum= outMin;
-	   }
 	}
 	
 	public void setSampleTime(int NewSampleTime) {
