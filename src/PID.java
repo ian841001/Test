@@ -46,7 +46,7 @@ public class PID {
 	    this.setOutputLimits(0, 255);				//default output limit corresponds to
 													//the arduino pwm limits
 
-	    SampleTime = 100;							//default Controller Sample Time is 0.1 seconds
+	    SampleTime = 250;							//default Controller Sample Time is 0.25 seconds
 
 	    this.setControllerDirection(ControllerDirection);
 	    this.setTunings(Kp, Ki, Kd, POn);
@@ -54,7 +54,7 @@ public class PID {
 	    lastTime = new Date().getTime()-SampleTime;
 	}
 	
-	public boolean compute()
+	public boolean compute(double inputCom, double setPointCom)
 	{
 	   if(!inAuto) return false;
 	   long now = new Date().getTime();
@@ -62,8 +62,8 @@ public class PID {
 	   if(timeChange>=SampleTime)
 	   {
 	      /*Compute all the working error variables*/
-	      double input = myInput;
-	      double error = mySetpoint - input;
+	      double input = inputCom;
+	      double error = setPointCom - input;
 	      double dInput = (input - lastInput);
 	      outputSum+= (ki * error);
 
